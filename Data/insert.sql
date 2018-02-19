@@ -1,6 +1,6 @@
 SET SERVEROUTPUT ON;
 
--- Procédure pour insérer les collections
+-- Procï¿½dure pour insï¿½rer les collections
 create or replace procedure inserer_collection(
     vCollection Collection.idCollection%type,
     pretour OUT number) AS
@@ -12,10 +12,10 @@ begin
     pretour:=0;
 Exception
     When Dup_val_on_index Then
-        DBMS_OUTPUT.PUT_LINE('La collection existe déjà ');
+        DBMS_OUTPUT.PUT_LINE('La collection existe dï¿½jï¿½ ');
         pretour:=1;
     when exception_nbcollection then
-        DBMS_OUTPUT.PUT_LINE('Le numéro de collection nest pas entre 1 et 5');
+        DBMS_OUTPUT.PUT_LINE('Le numï¿½ro de collection nest pas entre 1 et 5');
         pretour := 2;
     when others then
         DBMS_OUTPUT.PUT_LINE(sqlcode || sqlerrm);
@@ -23,7 +23,7 @@ Exception
 End;
 /
 
-accept vCollection  prompt 'Entrer un numéro de collection'
+accept vCollection  prompt 'Entrer un numï¿½ro de collection'
 Declare
     pretour NUMBER;
 Begin
@@ -32,7 +32,7 @@ Begin
 End;
 /
 
--- Procédure pour insérer les niveaux
+-- Procï¿½dure pour insï¿½rer les niveaux
 create or replace procedure inserer_niveau (
     vidniveau niveau.idNiveau%type,
     vcollection niveau.idCollection%type, 
@@ -49,7 +49,7 @@ begin
     pretour := 0;
 Exception
     When Dup_val_on_index Then
-        DBMS_OUTPUT.PUT_LINE('le niveau existe déjà ');
+        DBMS_OUTPUT.PUT_LINE('le niveau existe dï¿½jï¿½ ');
         pretour := 1;
     when exception_nbessai then
         DBMS_OUTPUT.PUT_LINE('Le nombre dessai nest pas dans les normes');
@@ -63,8 +63,8 @@ Exception
 End;
 /
 
-accept vidniveau prompt 'Entrer un numéro de niveau'
-accept vcollection prompt 'Entrer un numéro de collection'
+accept vidniveau prompt 'Entrer un numï¿½ro de niveau'
+accept vcollection prompt 'Entrer un numï¿½ro de collection'
 accept vnbessai prompt 'Entrer un nombre dessai'
 accept vtemps_max prompt 'Entrer un temps maximum'
 Declare
@@ -74,7 +74,7 @@ Begin
 End;
 /
 
--- Procédure pour insérer un nouveau joueur
+-- Procï¿½dure pour insï¿½rer un nouveau joueur
 create or replace procedure inserer_joueur(
     vidJoueur Joueur.idJoueur%type,
     vmdp Joueur.mdp%type, 
@@ -88,10 +88,10 @@ begin
     pretour := 0;
 Exception
     When Dup_val_on_index Then
-        DBMS_OUTPUT.PUT_LINE('le joueur éxiste déjà ');
+        DBMS_OUTPUT.PUT_LINE('le joueur ï¿½xiste dï¿½jï¿½ ');
         pretour := 1;
     when exception_mdp then
-        DBMS_OUTPUT.PUT_LINE('Le mot de passe doit etre entre 6 et 15 caractères');
+        DBMS_OUTPUT.PUT_LINE('Le mot de passe doit etre entre 6 et 15 caractï¿½res');
         pretour := 2;
     when others then
         DBMS_OUTPUT.PUT_LINE(sqlcode || sqlerrm);
@@ -109,7 +109,7 @@ Begin
 End;
 /
 
--- Procédure pour insérer une nouvelle Partie
+-- Procï¿½dure pour insï¿½rer une nouvelle Partie
 create or replace procedure inserer_Partie(
     vidPartie Partie.idPartie%type,
     vidJoueur Partie.idJoueur%type, 
@@ -142,10 +142,10 @@ begin
     pretour := 0;
 Exception
     When Dup_val_on_index Then
-        DBMS_OUTPUT.PUT_LINE('la partie éxiste déjà ');
+        DBMS_OUTPUT.PUT_LINE('la partie ï¿½xiste dï¿½jï¿½ ');
         pretour := 1;
     when exception_foreign then
-        DBMS_OUTPUT.PUT_LINE('Non respect dune clé etrangère');
+        DBMS_OUTPUT.PUT_LINE('Non respect dune clï¿½ etrangï¿½re');
         pretour := 2;
     when others then
         DBMS_OUTPUT.PUT_LINE(sqlcode || sqlerrm);
@@ -156,7 +156,7 @@ accept vidPartie prompt 'Entrer une nouvelle partie de joueur'
 accept vidJoueur prompt 'Entrer un identifiant de joueur'
 accept vmot  prompt 'Entrer un mot'
 accept vidNiveau prompt 'Entrer un niveau'
-accept vheure prompt 'Entrer une heure de début'
+accept vheure prompt 'Entrer une heure de dï¿½but'
 Declare
     pretour NUMBER;
 Begin
@@ -164,7 +164,7 @@ Begin
 End;
 /
 
--- Procédure pour insérer une nouvelle Mémoire
+-- Procï¿½dure pour insï¿½rer une nouvelle Mï¿½moire
 create or replace procedure inserer_memoire(
     vidEssai Memoire.idEssai%type,
     vidPartie Memoire.idPartie%type,
@@ -179,7 +179,7 @@ begin
     pretour := 0;
 Exception
     When Dup_val_on_index Then
-        DBMS_OUTPUT.PUT_LINE('lessai existe déjà ');
+        DBMS_OUTPUT.PUT_LINE('lessai existe dï¿½jï¿½ ');
         pretour := 1;
     when exception_foreign then
         DBMS_OUTPUT.PUT_LINE('La partie nexiste pas');
@@ -201,7 +201,7 @@ Begin
 End;
 /
 
--- Procédure pour modifier partie
+-- Procï¿½dure pour modifier partie
 create or replace procedure modif_partie(
     vidPartie Partie.idPartie%type,
     vidNiveau Partie.idNiveau%type,
@@ -239,7 +239,7 @@ End;
 
 
 -- Triggers
--- Blocage des niveaux en fonction de l'expérience
+-- Blocage des niveaux en fonction de l'expï¿½rience
 create or replace trigger t_b_i_Partie
 before insert on Partie
 declare
@@ -252,12 +252,12 @@ begin
     where p.idJoueur = j.idJoueur;
     select count(idPartie)into vnb_partie
     from partie
-    where :new.heure > heure - 1 and score = 0;
+    where :new.heure - heure > 1 and score = 0;
     if(vniveau_max < :new.niveau) then
-        raise application_error(-20001, 'Le joueur ne peut pas accéder à ce niveau');
+        raise application_error(-20001, 'Le joueur ne peut pas accï¿½der ï¿½ ce niveau');
         tretour := 1;
     elsif(vnb_partie > 5) then
-        raise application_error(-20002, 'Le joueur a perdu plus de 5 parties dans la dernière heure');
+        raise application_error(-20002, 'Le joueur a perdu plus de 5 parties dans la derniï¿½re heure');
         tretour := 2;
     end if;
 end;
