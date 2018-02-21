@@ -117,27 +117,11 @@ create or replace procedure inserer_Partie(
     vidNiveau Partie.idNiveau%type,
     vheure Partie.heure%type,
     pretour OUT number) AS
-    pidJoueur Partie.idJoueur%type; 
-    pmot Partie.mot%type;
-    pidNiveau Partie.idNiveau%type;
     exception_foreign exception;
-    i int:=0;
     pragma exception_init(exception_foreign, -02291);
 begin
-    select idJoueur into pidJoueur
-    from Joueur
-    where idJoueur = vidJoueur;
-    i := 1;
-    select mot into pmot
-    from dico
-    where mot = vmot;
-    i := 2;
-    select idNiveau into pidNiveau
-    from Niveau
-    where idNiveau = vidNiveau;
-    i := 3;
     insert into Partie (idPartie, idJoueur, mot, idNiveau, heure)
-    values (vidPartie, 'vidJoueur', 'vmot', vidNiveau, vheure);
+    values (vidPartie, vidJoueur, vmot, vidNiveau, vheure);
     commit;
     pretour := 0;
 Exception
